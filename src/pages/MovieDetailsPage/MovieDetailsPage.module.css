@@ -1,0 +1,13 @@
+.link {
+    text-decoration: none;
+    color: black;
+  }
+  
+  .link:hover {
+    text-decoration: underline;
+  }
+  
+  .isActive {
+    color: blue;
+  }
+  

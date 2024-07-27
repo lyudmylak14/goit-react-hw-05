@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, NavLink, Outlet, useParams } from "react-router-dom";
 import { getFilmAllInfo } from "../../movies-api";
+import clsx from "clsx";
+import css from "./MovieDetailsPage.module.css"
+
+const linkClass = ({ isActive }) => {
+  return clsx(css.link, isActive && css.isActive);
+};
 
 export default function MovieDetailsPage() {
   const { moviesId } = useParams();
@@ -26,7 +32,7 @@ export default function MovieDetailsPage() {
 
   return (
     <div>
-      <h1>{movie.title}</h1>
+      <Link to="/movies">Go back</Link>
       {movie.poster_path && (
         <img
           src={`${baseImageUrl}${movie.poster_path}`}
@@ -34,7 +40,28 @@ export default function MovieDetailsPage() {
           width="200"
         />
       )}
-      <p>{movie.overview}</p>
+      <h1>{movie.original_title}</h1>
+      <p>Release date: {movie.release_date} </p>
+      <p>Votes: {movie.vote_count}</p>
+      <p>Overview: {movie.overview}</p>
+      <p>
+        {" "}
+        Genres:{" "}
+        {movie.genres.map((genre) => (
+          <span key={genre.id}>{genre.name} </span>
+        ))}
+      </p>
+      <b>Additional information</b>
+      <ul className={css.nav}>
+        <li>
+          <NavLink to="cast" className={linkClass}> Cast</NavLink>
+        </li>
+        <li>
+          <NavLink to="reviews" className={linkClass}> Reviews</NavLink>
+        </li>
+      </ul>
+      
+      <Outlet/>
     </div>
   );
 }

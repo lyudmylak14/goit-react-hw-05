@@ -5,21 +5,11 @@ axios.defaults.baseURL = "https://api.themoviedb.org/3";
 const keyAuthorization =
   "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjODgxZDhmZWE2MzEzN2M5ZjY1YzZkYTczYzlhZjE3OSIsIm5iZiI6MTcyMTkwNjA2My42NDc5NDcsInN1YiI6IjY2YTBjNjU1YTlmOGZhNTkzZjUyOWNhZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.-ZHB8ejXpXQ2vmwrFd60ePTwFvAUIvgutx9Zj7UfHYM";
 
-// export const getMovies = async () => {
-//   const response = await axios.get("/movies");
-//   return response.data;
-// };
+axios.defaults.headers.common["Authorization"] = `Bearer ${keyAuthorization}`;
 
 export const getTrendingMovies = async () => {
   try {
-    const response = await axios.get("/trending/movie/day", {
-      headers: {
-        Authorization: `Bearer ${keyAuthorization}`,
-      },
-      params: {
-        language: "en-US",
-      },
-    });
+    const response = await axios("/trending/movie/day");
     return response.data.results;
   } catch (e) {
     console.error("Error fetching trending movies:", e);
@@ -30,15 +20,15 @@ export const getTrendingMovies = async () => {
 export const getFilmByQuery = async (query) => {
   try {
     const film = await axios(`/search/movie`, {
-      headers: {
-        Authorization: `Bearer ${keyAuthorization}`,
-      },
       params: {
         query,
       },
     });
+    console.log(film.data.results);
+    console.log(query);
     return film.data.results;
   } catch (e) {
+    console.log("error");
     console.error("Error fetching films by query:", e);
     throw e;
   }
@@ -46,11 +36,7 @@ export const getFilmByQuery = async (query) => {
 
 export const getFilmAllInfo = async (id) => {
   try {
-    const film = await axios(`/movie/${id}`, {
-      headers: {
-        Authorization: `Bearer ${keyAuthorization}`,
-      },
-    });
+    const film = await axios(`/movie/${id}`);
     return film.data;
   } catch (e) {
     console.error("Error fetching film all info:", e);
@@ -60,12 +46,8 @@ export const getFilmAllInfo = async (id) => {
 
 export const getFilmByCredits = async (id) => {
   try {
-    const film = await axios(`/movie/${id}/credits`, {
-      headers: {
-        Authorization: `Bearer ${keyAuthorization}`,
-      },
-    });
-    return film.data;
+    const film = await axios(`/movie/${id}/credits`);
+    return film.data.cast;
   } catch (e) {
     console.error("Error fetching film credits:", e);
     throw e;
@@ -74,11 +56,7 @@ export const getFilmByCredits = async (id) => {
 
 export const getFilmByReviews = async (id) => {
   try {
-    const film = await axios(`/movie/${id}/reviews`, {
-      headers: {
-        Authorization: `Bearer ${keyAuthorization}`,
-      },
-    });
+    const film = await axios(`/movie/${id}/reviews`);
     return film.data;
   } catch (e) {
     console.error("Error fetching film reviews:", e);

@@ -1,4 +1,4 @@
-import MoviesPage from "../../pages/MoviesPage/MoviesPage";
+// import MoviesPage from "../../pages/MoviesPage/MoviesPage";
 import { Link } from "react-router-dom";
 
 export default function MovieList({ movies }) {
@@ -8,7 +8,6 @@ export default function MovieList({ movies }) {
         <li key={movie.id}>
           <Link to={`/movies/${movie.id}`}>
             <p>{movie.title}</p>
-            <MoviesPage movie={movie} />
           </Link>
         </li>
       ))}
