@@ -1,0 +1,16 @@
+  .movieList {
+    list-style: none; 
+    padding-left: 0;
+  }
+  
+  .movieList li {
+    position: relative;
+    padding-left: 10px;
+  }
+  
+  .movieList li::before {
+    content: '•'; 
+    position: absolute;
+    left: 0;
+    color: black;
+  }

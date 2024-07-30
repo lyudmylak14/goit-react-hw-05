@@ -1,26 +1,24 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { getFilmByQuery } from "../../movies-api";
 import MovieList from "../../components/MovieList/MovieList";
 import { useSearchParams } from "react-router-dom";
+import SearchBar from "../../components/SearchBar/SearchBar";
+import css from "./MoviesPage.module.css"
 
 export default function MoviesPage() {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-
   const [params, setParams] = useSearchParams();
 
-  const changeSearchFilter = (e) => {
-    setSearchTerm(e.target.value.toLowerCase().trim());
-  };
 
-  const handleSearch = () => {
-    if (!searchTerm) return;
-    params.set("query", searchTerm);
-    setParams(params);
-    setSearchTerm("");
-  };
+  const handleSearch = useCallback(
+    (searchTerm) => {
+      params.set("query", searchTerm);
+      setParams(params);
+    },
+    [params, setParams]
+  );
 
   useEffect(() => {
     async function getData() {
@@ -37,13 +35,17 @@ export default function MoviesPage() {
     }
     getData();
   }, [params]);
-  console.log(movies);
+
+  const searchBarMemo = useMemo(
+    () => <SearchBar onSearch={handleSearch} />,
+    [handleSearch]
+  );
+
   return (
-    <div>
-      <input type="text" value={searchTerm} onChange={changeSearchFilter} />
-      <button onClick={handleSearch}>Search</button>
-      {isLoading && <b>Is loading movies...</b>}
-      {error ? <b>HTTP error</b> : <MovieList movies={movies} />}
+    <div className={css.page}>
+      {searchBarMemo}
+      {isLoading && <b className={css.loading}>Is loading movies...</b>}
+      {error ? <b className={css.error}>HTTP error</b> : <MovieList movies={movies} />}
     </div>
   );
 }

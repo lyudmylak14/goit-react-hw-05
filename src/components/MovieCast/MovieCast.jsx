@@ -4,7 +4,6 @@ import { getFilmByCredits } from "../../movies-api";
 
 export default function MovieCast() {
   const { moviesId } = useParams();
-  console.log(moviesId);
 
   const [casts, setCasts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -26,12 +25,12 @@ export default function MovieCast() {
     };
     getMovieCredits();
   }, [moviesId]);
-  console.log(casts);
+ 
   return (
     <>
-      {isLoading && <b>Is loading casts...</b>}
+      {isLoading && <b className="css.loading">Is loading casts...</b>}
       {error ? (
-        <b>HTTP error</b>
+        <b className="css.error">Error fetching film credits</b>
       ) : (
         <ul>
           {casts.map(({ character, original_name, profile_path, id }) => (
@@ -41,8 +40,8 @@ export default function MovieCast() {
                 alt={original_name}
                 width="100"
               />
-              <p>{original_name}</p>
-              <p>{character}</p>
+              <p>Name: {original_name}</p>
+              <p>Character: {character}</p>
             </li>
           ))}
         </ul>

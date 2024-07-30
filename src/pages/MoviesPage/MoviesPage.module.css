@@ -1,0 +1,17 @@
+.page {
+    padding: 2rem;
+  }
+  
+  .search-bar {
+    margin-bottom: 2rem;
+  }
+  
+  .loading {
+    font-weight: bold;
+    color: red;
+  }
+  
+  .error {
+    font-weight: bold;
+    color: red;
+  }

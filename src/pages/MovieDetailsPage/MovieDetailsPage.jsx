@@ -1,8 +1,14 @@
-import { useEffect, useState } from "react";
-import { Link, NavLink, Outlet, useParams } from "react-router-dom";
+import { Suspense, useEffect, useRef, useState } from "react";
+import {
+  Link,
+  NavLink,
+  Outlet,
+  useLocation,
+  useParams,
+} from "react-router-dom";
 import { getFilmAllInfo } from "../../movies-api";
 import clsx from "clsx";
-import css from "./MovieDetailsPage.module.css"
+import css from "./MovieDetailsPage.module.css";
 
 const linkClass = ({ isActive }) => {
   return clsx(css.link, isActive && css.isActive);
@@ -11,6 +17,11 @@ const linkClass = ({ isActive }) => {
 export default function MovieDetailsPage() {
   const { moviesId } = useParams();
   const [movie, setMovie] = useState(null);
+  const location = useLocation();
+  const goBack = useRef(location?.state ?? "/movies");
+
+  console.log(location, "moviedails");
+  console.log("ref", goBack);
   const baseImageUrl = "https://image.tmdb.org/t/p/w500";
 
   useEffect(() => {
@@ -31,37 +42,53 @@ export default function MovieDetailsPage() {
   }
 
   return (
-    <div>
-      <Link to="/movies">Go back</Link>
-      {movie.poster_path && (
-        <img
-          src={`${baseImageUrl}${movie.poster_path}`}
-          alt={movie.title}
-          width="200"
-        />
-      )}
-      <h1>{movie.original_title}</h1>
-      <p>Release date: {movie.release_date} </p>
-      <p>Votes: {movie.vote_count}</p>
-      <p>Overview: {movie.overview}</p>
-      <p>
-        {" "}
-        Genres:{" "}
-        {movie.genres.map((genre) => (
-          <span key={genre.id}>{genre.name} </span>
-        ))}
-      </p>
-      <b>Additional information</b>
-      <ul className={css.nav}>
-        <li>
-          <NavLink to="cast" className={linkClass}> Cast</NavLink>
-        </li>
-        <li>
-          <NavLink to="reviews" className={linkClass}> Reviews</NavLink>
-        </li>
-      </ul>
-      
-      <Outlet/>
+    <div className={css.page}>
+      <Link to={goBack.current}>Go back</Link>
+      <div className={css.movieDetails}>
+        <div className={css.posterContainer}>
+          {movie.poster_path && (
+            <img
+              src={`${baseImageUrl}${movie.poster_path}`}
+              alt={movie.title}
+              className={css.poster}
+            />
+          )}
+        </div>
+        <div className={css.details}>
+          <h1>{movie.original_title}</h1>
+          <p>Release date: {movie.release_date} </p>
+          <p>Votes: {movie.vote_count}</p>
+          <p>Overview: {movie.overview}</p>
+          <p>
+            {" "}
+            Genres:{" "}
+            {movie.genres.map((genre) => (
+              <span key={genre.id}>{genre.name} </span>
+            ))}
+          </p>
+          <div className={css.additionalInfo}>
+            <b>Additional information</b>
+            <ul className={css.nav}>
+              <li>
+                <NavLink to="cast" className={linkClass}>
+                  {" "}
+                  Cast
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="reviews" className={linkClass}>
+                  {" "}
+                  Reviews
+                </NavLink>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <Suspense fallback={<div>LOADING...</div>}>
+        <Outlet />
+      </Suspense>
     </div>
   );
 }

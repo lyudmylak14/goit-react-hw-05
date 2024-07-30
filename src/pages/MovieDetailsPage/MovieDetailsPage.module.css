@@ -1,13 +1,63 @@
+.page {
+  padding: 20px;
+}
+
+.movieDetails {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.posterContainer {
+  flex-shrink: 0;
+}
+
+.poster {
+  padding-top: 5px;
+  width: 200px;
+  height: auto;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.additionalInfo {
+  margin-top: 240px;
+  margin-right: auto;
+}
+
+.nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
 .link {
-    text-decoration: none;
-    color: black;
-  }
-  
-  .link:hover {
-    text-decoration: underline;
-  }
-  
-  .isActive {
-    color: blue;
-  }
-  
+  text-decoration: none;
+  color: black;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.isActive {
+  color: blue;
+}
+
+.nav li {
+  position: relative;
+}
+
+.nav li::before {
+  content: "•";
+  position: absolute;
+  left: -15px;
+  color: black;
+}

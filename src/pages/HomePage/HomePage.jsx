@@ -20,8 +20,9 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div>
-      <h1 className={css.title}>Trending Today</h1>
+    <div className={css.page}>
+      <h1 className={css.pageTitle}>Trending Today</h1>
+      <div className={css.movieListContainer}></div>
       <MovieList movies={movies} />
     </div>
   );
